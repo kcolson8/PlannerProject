@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    tools:context=".HomeworkActivity">
+
+    <EditText
+        android:id="@+id/titleEditText"
+        android:hint="Homework assignment title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="1" />
+
+    <Spinner
+        android:id="@+id/subjectSpinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="1" />
+
+    <EditText
+        android:id="@+id/descriptionEditText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:hint="Homework assignment description"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2" />
+
+    <TextView
+        android:id="@+id/dueDateTextView"
+        android:text="Pick the day your homework is due"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2" />
+
+    <Button
+        android:id="@+id/pickDueDateButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Pick Due Date"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2" />
+
+    <TextView
+        android:id="@+id/reminderDateTextView"
+        android:text="Pick the day you want to be reminded"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2" />
+
+    <Button
+        android:id="@+id/pickReminderDateButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Pick Reminder Date"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2" />
+
+    <TextView
+        android:id="@+id/reminderTextView"
+        android:text="Pick a time you want to be reminded"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2" />
+
+    <TimePicker
+        android:id="@+id/reminderTimePicker"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2"
+        android:timePickerMode="spinner" />
+
+    <!--<EditText
+        android:id="@+id/dateEditText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:ems="10"
+        android:inputType="date"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="2"
+        android:layout_columnSpan="2" />
+
+    <EditText
+        android:id="@+id/timeEditText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:ems="10"
+        android:inputType="time"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="2"
+        android:layout_columnSpan="2" />-->
+
+    <Button
+        android:id="@+id/doneButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Save!"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2" />
+
+
+</GridLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/addHomeworkButton"
+        android:title="Add A New Homework Item"
+        android:icon="@android:drawable/ic_menu_edit"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/addExamButton"
+        android:title="Add A New Exam Item"
+        android:icon="@android:drawable/ic_input_get"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/addReminderButton"
+        android:title="Add A New Reminder Item"
+        android:icon="@android:drawable/ic_popup_reminder"
+        app:showAsAction="ifRoom" />
+
+</menu>
