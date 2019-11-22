@@ -51,7 +51,18 @@
         android:text="Pick Due Date"
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
-        android:layout_columnSpan="2" />
+        android:layout_columnSpan="1" />
+
+    <TextView
+        android:id="@+id/dueDateConfirmTextView"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="1" />
 
     <TextView
         android:id="@+id/reminderDateTextView"
@@ -71,7 +82,18 @@
         android:text="Pick Reminder Date"
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
-        android:layout_columnSpan="2" />
+        android:layout_columnSpan="1" />
+
+    <TextView
+        android:id="@+id/reminderDateConfirmTextView"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="1" />
 
     <TextView
         android:id="@+id/reminderTextView"
