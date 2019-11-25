@@ -3,6 +3,8 @@ package com.example.porcupineplanner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,23 +23,48 @@ public class HomeworkActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     Date currentTime = Calendar.getInstance().getTime();
     TextView dueDateConfirmTextView;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
 
+        //Most of the code below is from this video:
+        //https://www.youtube.com/watch?v=hwe1abDO2Ag
         dueDateConfirmTextView = findViewById(R.id.dueDateConfirmTextView);
         Button pickDueDateButton = findViewById(R.id.pickDueDateButton);
         pickDueDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar cal=Calendar.getInstance();
-                int year=cal.get(Calendar.YEAR);
-                int month=cal.get(Calendar.MONTH);
-                int day=cal.get(Calendar.DAY_OF_WEEK);
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_WEEK);
 
-                DatePickerDialog dp=new DatePickerDialog(HomeworkActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(
+                        HomeworkActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                m++;
+                dueDateConfirmTextView.setText(m + "/" + d + "/" + y);
+            }
+        };
+    }
+}
+
+// Old code
+
+ /*DatePickerDialog dp=new DatePickerDialog(HomeworkActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int myYear, int myMonth, int myDay) {
                         // TODO: fix
@@ -45,7 +72,7 @@ public class HomeworkActivity extends AppCompatActivity {
                     }
                 },year,month,day);
                 dp.getDatePicker().setMaxDate(cal.getTimeInMillis());
-                dp.show();
+                dp.show();*/
 
 
 
@@ -58,10 +85,8 @@ public class HomeworkActivity extends AppCompatActivity {
                 datePickerDialog = new DatePickerDialog(HomeworkActivity.this);
                 datePickerDialog.show();
                 Log.d("myTag", "myTag: " + datePickerDialog.getDatePicker());*/
-            }
-        });
 
-        Button pickReminderDateButton = findViewById(R.id.pickReminderDateButton);
+        /*Button pickReminderDateButton = findViewById(R.id.pickReminderDateButton);
         pickDueDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,6 +94,7 @@ public class HomeworkActivity extends AppCompatActivity {
                 datePickerDialog = new DatePickerDialog(HomeworkActivity.this);
                 datePickerDialog.show();
             }
-        });
-    }
+        });*/
+    /*}
 }
+*/
