@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,28 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sqlSelectHomework, null);
         return cursor;
+    }
+
+    public Homework getSelectOneHomeworkCursor(long id){
+        String sqlSelect = "SELECT * FROM " + HOMEWORK_TABLE +
+                " WHERE " + ID + "=" + id;
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(sqlSelect, null);
+
+        Homework homework = new Homework();
+        while(cursor.moveToNext()) {
+            String title = cursor.getString(1);
+            String subject = cursor.getString(2);
+            String description = cursor.getString(3);
+            String dueDate = cursor.getString(4);
+            String reminderDate = cursor.getString(5);
+            int reminderHour = cursor.getInt(6);
+            int reminderMinute = cursor.getInt(7);
+            homework = new Homework(title, subject, description, dueDate, reminderDate, reminderHour, reminderMinute);
+        }
+        return homework;
     }
 
     // Need one of these for exam and reminder tables

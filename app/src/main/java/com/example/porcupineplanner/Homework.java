@@ -13,6 +13,16 @@ public class Homework {
     int reminderHour;
     int reminderMinute;
 
+    public Homework(){
+        title = "TITLE";
+        subject = "SUBJECT";
+        description = "DESCRIPTION";
+        dueDate = "DUE DATE";
+        reminderDate = "REMINDER DATE";
+        reminderHour = 0;
+        reminderMinute = 0;
+    }
+
     public Homework(String title, String subject, String description, String dueDate, String reminderDate, int reminderHour, int reminderMinute) {
         this.title = title;
         this.subject = subject;

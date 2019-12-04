@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="2"
+    android:padding="10dp"
     tools:context=".HomeworkActivity">
 
     <EditText
         android:id="@+id/titleEditText"
-        android:hint="Homework assignment title"
+        android:hint="Assignment title"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_rowWeight="1"
@@ -29,18 +30,20 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:hint="Homework assignment description"
-        android:layout_rowWeight="1"
+        android:gravity="top"
+        android:layout_rowWeight="2"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2" />
 
     <TextView
         android:id="@+id/dueDateTextView"
-        android:text="Pick the day your homework is due"
-        android:textAlignment="center"
+        android:text=" Homework due date"
+        android:textColor="@color/black"
+        android:gravity="bottom"
         android:textSize="20dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
+        android:layout_rowWeight=".5"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2" />
 
@@ -56,7 +59,9 @@
     <TextView
         android:id="@+id/dueDateConfirmTextView"
         android:text=""
+        android:textColor="@color/blue"
         android:textAlignment="center"
+        android:gravity="center"
         android:textSize="20dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -66,12 +71,13 @@
 
     <TextView
         android:id="@+id/reminderDateTextView"
-        android:text="Pick the day you want to be reminded"
-        android:textAlignment="center"
+        android:text=" Reminder date"
+        android:textColor="@color/black"
+        android:gravity="bottom"
         android:textSize="20dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
+        android:layout_rowWeight=".5"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2" />
 
@@ -87,7 +93,9 @@
     <TextView
         android:id="@+id/reminderDateConfirmTextView"
         android:text=""
+        android:textColor="@color/blue"
         android:textAlignment="center"
+        android:gravity="center"
         android:textSize="20dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -98,11 +106,13 @@
     <TextView
         android:id="@+id/reminderTextView"
         android:text="Pick a time you want to be reminded"
+        android:textColor="@color/black"
         android:textAlignment="center"
+        android:gravity="bottom"
         android:textSize="20dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
+        android:layout_rowWeight=".5"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2" />
 
@@ -110,7 +120,7 @@
         android:id="@+id/reminderTimePicker"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_rowWeight="1"
+        android:layout_rowWeight="1.5"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2"
         android:timePickerMode="spinner" />

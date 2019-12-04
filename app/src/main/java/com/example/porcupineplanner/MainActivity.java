@@ -25,21 +25,28 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     static final int NEW_HOMEWORK_REQUEST_CODE = 1;
+    static final int EDIT_HOMEWORK_REQUEST_CODE = 2;
     ListView listView;
     SimpleCursorAdapter cursorAdapter;
     final String CHANNEL_ID = "channel id";
-    Calendar calendar;
+    Calendar calendar = Calendar.getInstance();
     DatePickerDialog datePickerDialog;
-    Date currentTime = Calendar.getInstance().getTime();
+   // Date currentTime = Calendar.getInstance().getTime();
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -89,15 +96,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // Format: Tue Dec 03 17:40:32 PST 2019
-        Log.d("myTag", "current time: " + currentTime.toString());
-
-
-
-
-
-
         listView = findViewById(R.id.listView);
         final DatabaseOpenHelper openHelper = new DatabaseOpenHelper(this);
         cursorAdapter = new SimpleCursorAdapter(
@@ -109,6 +107,31 @@ public class MainActivity extends AppCompatActivity {
                 0
         );
         listView.setAdapter(cursorAdapter);
+
+        //click listener for when an item in the listView is clicked to view/edit
+        /*
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int itemId = (int) listView.getItemAtPosition(position);
+
+                //if homework item is selected...
+                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
+
+                Homework selectedHomework = openHelper.getSelectOneHomeworkCursor(id); //HomeworkId?
+
+                intent.putExtra("title", selectedHomework.getTitle());
+                intent.putExtra("subject", selectedHomework.getSubject());
+                intent.putExtra("description", selectedHomework.getDescription());
+                intent.putExtra("dueDate", selectedHomework.getDueDate());
+                intent.putExtra("reminderDate", selectedHomework.getReminderDate());
+                intent.putExtra("reminderHour", selectedHomework.getReminderHour());
+                intent.putExtra("reminderMinute", selectedHomework.getReminderMinute());
+
+                startActivityForResult(intent, EDIT_HOMEWORK_REQUEST_CODE);
+            }
+        });
+         */
     }
 
     @Override
@@ -165,6 +188,24 @@ public class MainActivity extends AppCompatActivity {
             );
             listView.setAdapter(cursorAdapter);
 
+            Log.d("myTag", "Due Date: " + dueDate + " reminderDate: " + reminderDate + " reminderHour: " + reminderHour + " reminderMinute: " + reminderMinute);
+            String[] parsedReminderDate = reminderDate.split("/"); //format: [month, date, year]
+
+            int currentHour = calendar.get(Calendar.HOUR);
+            int currentMinute = calendar.get(Calendar.MINUTE);
+            int currentYear = calendar.get(Calendar.YEAR);
+            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentDay = calendar.get(Calendar.DATE);
+
+
+            Date reminderCalendarDate = new GregorianCalendar(Integer.parseInt(parsedReminderDate[2]), Integer.parseInt(parsedReminderDate[0]), Integer.parseInt(parsedReminderDate[1]), reminderHour, reminderMinute).getTime();
+            Log.d("myTag", "reminder date: " + reminderCalendarDate.toString());
+
+            Date currentCalendarDate = new GregorianCalendar(currentYear, currentMonth, currentDay, currentHour, currentMinute).getTime();
+            Log.d("myTag", "current date: " + currentCalendarDate.toString());
+
+            long timeDayDifference = reminderCalendarDate.getTime() - currentCalendarDate.getTime(); //should become delay;
+            Log.d("myTag", "time difference in milliseconds: " + timeDayDifference);
 
             scheduleNotification(this, 1000, 1);
         }
