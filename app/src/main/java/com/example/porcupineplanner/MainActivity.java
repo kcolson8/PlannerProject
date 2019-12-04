@@ -1,3 +1,6 @@
+// notifications:
+// https://developer.android.com/training/notify-user/build-notification
+
 package com.example.porcupineplanner;
 
 import androidx.annotation.NonNull;
@@ -6,17 +9,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -42,11 +48,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void scheduleNotification(Context context, long delay, int notificationId) {//delay is after how much time(in millis) from current time you want to schedule the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                //.setSmallIcon(R.drawable.notification_icon)
+                //.setContentTitle(textTitle)
+                //.setContentText(textContent)
+                //<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                .setSmallIcon(R.drawable.porcupine)
+                .setContentTitle("Hello world!")
+                .setContentText("You just got a notification")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent activity = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.setContentIntent(activity);
+
+        Notification notification = builder.build();
+
+        Intent notificationIntent = new Intent(context, MyNotificationPublisher.class);
+        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION_ID, notificationId);
+        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+
+
+
+        /*NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         // notificationId is a unique int for each notification that you must define
         int notificationId = 1;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -59,7 +96,12 @@ public class MainActivity extends AppCompatActivity {
                 .setContentText("You just got a notification")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         notificationManager.notify(notificationId, builder.build());
-        createNotificationChannel();
+        createNotificationChannel();*/
+
+
+
+
+
 
         listView = findViewById(R.id.listView);
         final DatabaseOpenHelper openHelper = new DatabaseOpenHelper(this);
@@ -93,10 +135,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, NEW_HOMEWORK_REQUEST_CODE);
                 return true;
             case R.id.addExamButton:
-                //Toast.makeText(this, "TODO: show preferences", Toast.LENGTH_SHORT).show();
+                //TODO: get this working
                 return true;
             case R.id.addReminderButton:
-                //Toast.makeText(this, "TODO: show about app", Toast.LENGTH_SHORT).show();
+                //TODO: get this working
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -128,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             );
             listView.setAdapter(cursorAdapter);
 
-
+            scheduleNotification(this, 1000, 1);
         }
     }
 }
