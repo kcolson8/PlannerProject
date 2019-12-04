@@ -3,8 +3,13 @@ package com.example.porcupineplanner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.Menu;
@@ -19,11 +24,42 @@ public class MainActivity extends AppCompatActivity {
     static final int NEW_HOMEWORK_REQUEST_CODE = 1;
     ListView listView;
     SimpleCursorAdapter cursorAdapter;
+    final String CHANNEL_ID = "channel id";
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        // notificationId is a unique int for each notification that you must define
+        int notificationId = 1;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                //.setSmallIcon(R.drawable.notification_icon)
+                //.setContentTitle(textTitle)
+                //.setContentText(textContent)
+                //<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                .setSmallIcon(R.drawable.porcupine)
+                .setContentTitle("Hello world!")
+                .setContentText("You just got a notification")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        notificationManager.notify(notificationId, builder.build());
+        createNotificationChannel();
 
         listView = findViewById(R.id.listView);
         final DatabaseOpenHelper openHelper = new DatabaseOpenHelper(this);
@@ -91,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
                     0
             );
             listView.setAdapter(cursorAdapter);
+
+
         }
     }
-
-
 }

@@ -103,6 +103,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    // Need one of these for exam and reminder tables
+
    /* // ~~~~~~~~~ getClass is an actual sql method, define it as get class name in classes :)
     public void insertExamItem(Exam exam) {
         // INSERT INTO examTable VALUES (null, <title>, <class>, <description>, <examDate>, <reminderDate>, <reminderTime>)
