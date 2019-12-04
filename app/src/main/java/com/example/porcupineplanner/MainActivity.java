@@ -1,31 +1,41 @@
 package com.example.porcupineplanner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 public class MainActivity extends AppCompatActivity {
+    static final int NEW_HOMEWORK_REQUEST_CODE = 1;
+    ListView listView;
+    SimpleCursorAdapter cursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button goToHomeworkActivity = findViewById(R.id.goToHomeworkActivity);
-        goToHomeworkActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
-                startActivity(intent);
-            }
-        });
+        listView = findViewById(R.id.listView);
+        final DatabaseOpenHelper openHelper = new DatabaseOpenHelper(this);
+        cursorAdapter = new SimpleCursorAdapter(
+                this,
+                android.R.layout.simple_list_item_activated_1,
+                openHelper.getSelectAllHomeworkCursor(),
+                new String[] {DatabaseOpenHelper.TITLE},
+                new int[] {android.R.id.text1},
+                0
+        );
+        listView.setAdapter(cursorAdapter);
     }
 
     @Override
@@ -43,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.addHomeworkButton:
-                //startEditItemActivity();
+                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
+                startActivityForResult(intent, NEW_HOMEWORK_REQUEST_CODE);
                 return true;
             case R.id.addExamButton:
                 //Toast.makeText(this, "TODO: show preferences", Toast.LENGTH_SHORT).show();
@@ -55,4 +66,33 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEW_HOMEWORK_REQUEST_CODE && resultCode == RESULT_OK) {
+            String title = data.getStringExtra("title");
+            String className = data.getStringExtra("class");
+            String description = data.getStringExtra("description");
+            String dueDate = data.getStringExtra("dueDate");
+            String reminderDate = data.getStringExtra("reminderDate");
+            int reminderHour = data.getIntExtra("reminderHour", 0);
+            int reminderMinute = data.getIntExtra("reminderMinute", 0);
+
+            DatabaseOpenHelper openHelper = new DatabaseOpenHelper(this);
+            openHelper.insertHomeworkItem(new Homework(title, className, description, dueDate, reminderDate, reminderHour, reminderMinute));
+
+            cursorAdapter = new SimpleCursorAdapter(
+                    this,
+                    android.R.layout.simple_list_item_activated_1,
+                    openHelper.getSelectAllHomeworkCursor(),
+                    new String[] {DatabaseOpenHelper.TITLE},
+                    new int[] {android.R.id.text1},
+                    0
+            );
+            listView.setAdapter(cursorAdapter);
+        }
+    }
+
+
 }

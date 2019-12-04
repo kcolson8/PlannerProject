@@ -49,7 +49,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 REMINDER_TIME + " TEXT)";
         sqLiteDatabase.execSQL(sqlCreateHomework);
 
-        // CREATE TABLE examTable (_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        /*// CREATE TABLE examTable (_id INTEGER PRIMARY KEY AUTOINCREMENT,
         //			               title TEXT,
         //			               class TEXT,
         //			               description TEXT,
@@ -79,16 +79,16 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 DESCRIPTION + " TEXT, " +
                 REMINDER_DATE + " TEXT, " +
                 REMINDER_TIME + " TEXT)";
-        sqLiteDatabase.execSQL(sqlCreateReminder);
+        sqLiteDatabase.execSQL(sqlCreateReminder);*/
     }
 
-/*    // ~~~~~~~~~ getClass is an actual sql method, define it as get class name in classes :)
+    // ~~~~~~~~~ getClass is an actual sql method, define it as get class name in classes :)
     public void insertHomeworkItem(Homework homework) {
         // INSERT INTO homeworkTable VALUES (null, <title>, <class>, <description>, <dueDate>, <reminderDate>, <reminderTime>)
         String sqlInsertHomework = "INSERT INTO " + HOMEWORK_TABLE + " VALUES (null, '" +
-                homework.getTitle() + "', '" +  homework.getClassName() + "', '" +
+                homework.getTitle() + "', '" +  homework.getSubject() + "', '" +
                 homework.getDescription() + "', '" +  homework.getDueDate() + "', '" +
-                homework.getReminderDate() + "', '" +  homework.getReminderTime() + "')";
+                homework.getReminderDate() + "', '" +  homework.getSubject() + "')";
         // Get a reference to the database for writing
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sqlInsertHomework);
@@ -96,7 +96,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    // ~~~~~~~~~ getClass is an actual sql method, define it as get class name in classes :)
+    public Cursor getSelectAllHomeworkCursor(){
+        String sqlSelectHomework = "SELECT * FROM " + HOMEWORK_TABLE;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sqlSelectHomework, null);
+        return cursor;
+    }
+
+   /* // ~~~~~~~~~ getClass is an actual sql method, define it as get class name in classes :)
     public void insertExamItem(Exam exam) {
         // INSERT INTO examTable VALUES (null, <title>, <class>, <description>, <examDate>, <reminderDate>, <reminderTime>)
         String sqlInsertExam = "INSERT INTO " + EXAM_TABLE + " VALUES (null, '" +
