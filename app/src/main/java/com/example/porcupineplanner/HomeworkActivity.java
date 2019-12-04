@@ -24,9 +24,6 @@ import java.util.Date;
 
 
 public class HomeworkActivity extends AppCompatActivity {
-    Calendar calendar;
-    DatePickerDialog datePickerDialog;
-    Date currentTime = Calendar.getInstance().getTime();
     TextView dueDateConfirmTextView;
     TextView reminderDateConfirmTextView;
     private DatePickerDialog.OnDateSetListener mDateSetListener;

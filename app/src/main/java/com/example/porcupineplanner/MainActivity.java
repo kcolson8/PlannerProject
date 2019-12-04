@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,17 +21,25 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     static final int NEW_HOMEWORK_REQUEST_CODE = 1;
     ListView listView;
     SimpleCursorAdapter cursorAdapter;
     final String CHANNEL_ID = "channel id";
+    Calendar calendar;
+    DatePickerDialog datePickerDialog;
+    Date currentTime = Calendar.getInstance().getTime();
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -81,22 +90,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-
-        /*NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        // notificationId is a unique int for each notification that you must define
-        int notificationId = 1;
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                //.setSmallIcon(R.drawable.notification_icon)
-                //.setContentTitle(textTitle)
-                //.setContentText(textContent)
-                //<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-                .setSmallIcon(R.drawable.porcupine)
-                .setContentTitle("Hello world!")
-                .setContentText("You just got a notification")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        notificationManager.notify(notificationId, builder.build());
-        createNotificationChannel();*/
+        // Format: Tue Dec 03 17:40:32 PST 2019
+        Log.d("myTag", "current time: " + currentTime.toString());
 
 
 
@@ -169,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     0
             );
             listView.setAdapter(cursorAdapter);
+
 
             scheduleNotification(this, 1000, 1);
         }
