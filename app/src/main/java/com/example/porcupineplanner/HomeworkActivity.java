@@ -45,7 +45,6 @@ public class HomeworkActivity extends AppCompatActivity {
         if(intent != null){
             id = intent.getIntExtra("id",0);
             String title = intent.getStringExtra("title");
-            String subject = intent.getStringExtra("subject");
             String description = intent.getStringExtra("description");
             String dueDate = intent.getStringExtra("dueDate");
             String reminderDate = intent.getStringExtra("reminderDate");
@@ -164,7 +163,6 @@ public class HomeworkActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.putExtra("id", id);
                 intent.putExtra("title", titleEditText.getText().toString());
-                intent.putExtra("class", "spinner value");
                 intent.putExtra("description", descriptionEditText.getText().toString());
                 intent.putExtra("dueDate", dueDateConfirmTextView.getText());
                 intent.putExtra("reminderDate", reminderDateConfirmTextView.getText());
