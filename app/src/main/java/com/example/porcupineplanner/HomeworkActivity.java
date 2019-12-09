@@ -95,20 +95,23 @@ public class HomeworkActivity extends AppCompatActivity {
         final EditText titleEditText = findViewById(R.id.titleEditText);
         final EditText descriptionEditText = findViewById(R.id.descriptionEditText);
         final TimePicker reminderTimePicker = findViewById(R.id.reminderTimePicker);
-        final int hour = reminderTimePicker.getCurrentHour();
-        final int minute = reminderTimePicker.getCurrentMinute();
+        final int hour = reminderTimePicker.getHour();
+        final int minute = reminderTimePicker.getMinute();
         Button saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int userSetHour = reminderTimePicker.getHour();
+                int userSetMinute = reminderTimePicker.getMinute();
                 Intent intent = new Intent();
                 intent.putExtra("title", titleEditText.getText().toString());
                 intent.putExtra("class", "spinner value");
                 intent.putExtra("description", descriptionEditText.getText().toString());
                 intent.putExtra("dueDate", dueDateConfirmTextView.getText());
                 intent.putExtra("reminderDate", reminderDateConfirmTextView.getText());
-                intent.putExtra("reminderHour", hour);
-                intent.putExtra("reminderMinute", minute);
+                intent.putExtra("reminderHour", userSetHour);
+                intent.putExtra("reminderMinute", userSetMinute);
+                Log.d("myTag", "timepicker hour: " + userSetHour + " timepicker minute: " + userSetMinute);
                 setResult(Activity.RESULT_OK, intent);
                 HomeworkActivity.this.finish();
             }
