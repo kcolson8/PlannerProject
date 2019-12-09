@@ -68,7 +68,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     public void insertExamItem(Exam exam) {
         // INSERT INTO plannerTable VALUES (null, 'exam', <title>, <description>, <dueDate>, <reminderDate>, <reminderMinute>, <reminderHour>)
-        String sqlInsert = "INSERT INTO " + PLANNER_TABLE + " VALUES (null, 'exam', ''" +
+        String sqlInsert = "INSERT INTO " + PLANNER_TABLE + " VALUES (null, 'exam', '" +
                 exam.getTitle() + "', '" + exam.getDescription() + "', '" +
                 exam.getDueDate() + "', '" + exam.getReminderDate() + "', '" +
                 exam.getReminderHour() + "', '" + exam.getReminderMinute() + "')";
@@ -82,8 +82,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public void insertReminderItem(Reminder reminder) {
         // INSERT INTO plannerTable VALUES (null, 'reminder', <title>, <description>, null, <reminderDate>, <reminderMinute>, <reminderHour>)
         // dueDate is set to null, because this field is not needed for a simple reminder
-        String sqlInsert = "INSERT INTO " + PLANNER_TABLE + " VALUES (null, 'reminder', ''" +
-                reminder.getTitle() + "', '" + reminder.getDescription() + "', null, " +
+        String sqlInsert = "INSERT INTO " + PLANNER_TABLE + " VALUES (null, 'reminder', '" +
+                reminder.getTitle() + "', '" + reminder.getDescription() + "', null, '" +
                 reminder.getReminderDate() + "', '" + reminder.getReminderHour() + "', '" +
                 reminder.getReminderMinute() + "')";
         // Get a reference to the database for writing
