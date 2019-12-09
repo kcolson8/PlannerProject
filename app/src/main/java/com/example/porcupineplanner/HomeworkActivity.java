@@ -39,13 +39,13 @@ public class HomeworkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
 
-
         //grabs intent when editing a note to set title, label, and content as user last set it
         Intent intent = getIntent();
         if(intent != null){
             id = intent.getIntExtra("id",0);
+            Log.d("myTag", "id in homeworkactivity passing in intent: " + id);
             String title = intent.getStringExtra("title");
-            String subject = intent.getStringExtra("subject");
+            //String subject = intent.getStringExtra("subject");
             String description = intent.getStringExtra("description");
             String dueDate = intent.getStringExtra("dueDate");
             String reminderDate = intent.getStringExtra("reminderDate");
@@ -163,6 +163,7 @@ public class HomeworkActivity extends AppCompatActivity {
                 int userSetMinute = reminderTimePicker.getMinute() - 1;
                 Intent intent = new Intent();
                 intent.putExtra("id", id);
+                Log.d("myTag", "id in homeworkactivity: " + id);
                 intent.putExtra("title", titleEditText.getText().toString());
                 intent.putExtra("class", "spinner value");
                 intent.putExtra("description", descriptionEditText.getText().toString());

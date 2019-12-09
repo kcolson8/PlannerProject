@@ -6,7 +6,6 @@ import java.util.Calendar;
 
 public class Homework {
     String title;
-    String subject;
     String description;
     String dueDate;
     String reminderDate;
@@ -15,7 +14,6 @@ public class Homework {
 
     public Homework(){
         title = "TITLE";
-        subject = "SUBJECT";
         description = "DESCRIPTION";
         dueDate = "DUE DATE";
         reminderDate = "REMINDER DATE";
@@ -23,9 +21,8 @@ public class Homework {
         reminderMinute = 0;
     }
 
-    public Homework(String title, String subject, String description, String dueDate, String reminderDate, int reminderHour, int reminderMinute) {
+    public Homework(String title, String description, String dueDate, String reminderDate, int reminderHour, int reminderMinute) {
         this.title = title;
-        this.subject = subject;
         this.description = description;
         this.dueDate = dueDate;
         this.reminderDate = reminderDate;
@@ -39,14 +36,6 @@ public class Homework {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
     }
 
     public String getDescription() {

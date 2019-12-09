@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         cursorAdapter = new SimpleCursorAdapter(
                 this,
                 android.R.layout.simple_list_item_activated_1,
-                openHelper.getSelectAllHomeworkCursor(),
+                openHelper.getAllItemsCursor(),
                 new String[] {DatabaseOpenHelper.TITLE},
                 new int[] {android.R.id.text1},
                 0
@@ -117,18 +117,28 @@ public class MainActivity extends AppCompatActivity {
                 //if homework item is selected...
                 Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
 
-                Homework selectedHomework = openHelper.getSelectOneHomeworkCursor(position + 1); //HomeworkId?
+                String itemType = openHelper.getItemType(position + 1);
+                switch (itemType) {
+                    case "homework":
+                        Homework selectedHomework = openHelper.getHomeworkByID(position + 1);
+                        Log.d("myTag", "selectedHomework title: " + selectedHomework.getTitle());
+                        intent.putExtra("id", position + 1);
+                        intent.putExtra("title", selectedHomework.getTitle());
+                        intent.putExtra("description", selectedHomework.getDescription());
+                        intent.putExtra("dueDate", selectedHomework.getDueDate());
+                        intent.putExtra("reminderDate", selectedHomework.getReminderDate());
+                        intent.putExtra("reminderHour", selectedHomework.getReminderHour());
+                        intent.putExtra("reminderMinute", selectedHomework.getReminderMinute());
 
-                intent.putExtra("id", position + 1);
-                intent.putExtra("title", selectedHomework.getTitle());
-                intent.putExtra("subject", selectedHomework.getSubject());
-                intent.putExtra("description", selectedHomework.getDescription());
-                intent.putExtra("dueDate", selectedHomework.getDueDate());
-                intent.putExtra("reminderDate", selectedHomework.getReminderDate());
-                intent.putExtra("reminderHour", selectedHomework.getReminderHour());
-                intent.putExtra("reminderMinute", selectedHomework.getReminderMinute());
-
-                startActivityForResult(intent, EDIT_HOMEWORK_REQUEST_CODE);
+                        startActivityForResult(intent, EDIT_HOMEWORK_REQUEST_CODE);
+                        break;
+                    /*case "exam":
+                        Exam selectedExam = openHelper.getSelectOneHomeworkCursor(position + 1);
+                        break;
+                    case "reminder":
+                        Homework selectedReminder = openHelper.getSelectOneHomeworkCursor(position + 1);
+                        break;*/
+                }
             }
         });
     }
@@ -168,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             int id = data.getIntExtra("id", 0);
             String title = data.getStringExtra("title");
-            String className = data.getStringExtra("class");
+            //String className = data.getStringExtra("class");
             String description = data.getStringExtra("description");
             String dueDate = data.getStringExtra("dueDate");
             String reminderDate = data.getStringExtra("reminderDate");
@@ -177,14 +187,14 @@ public class MainActivity extends AppCompatActivity {
 
             DatabaseOpenHelper openHelper = new DatabaseOpenHelper(this);
             if(requestCode == NEW_HOMEWORK_REQUEST_CODE) {
-                openHelper.insertHomeworkItem(new Homework(title, className, description, dueDate, reminderDate, reminderHour, reminderMinute));
+                openHelper.insertHomeworkItem(new Homework(title, description, dueDate, reminderDate, reminderHour, reminderMinute));
             } else if(requestCode == EDIT_HOMEWORK_REQUEST_CODE){
-                openHelper.updateHomeworkById(id, new Homework(title, className, description, dueDate, reminderDate, reminderHour, reminderMinute));
+                openHelper.updateHomeworkById(id, new Homework(title, description, dueDate, reminderDate, reminderHour, reminderMinute));
             }
             cursorAdapter = new SimpleCursorAdapter(
                     this,
                     android.R.layout.simple_list_item_activated_1,
-                    openHelper.getSelectAllHomeworkCursor(),
+                    openHelper.getAllItemsCursor(),
                     new String[] {DatabaseOpenHelper.TITLE},
                     new int[] {android.R.id.text1},
                     0
@@ -199,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
             int currentYear = calendar.get(Calendar.YEAR);
             int currentMonth = calendar.get(Calendar.MONTH);
             int currentDay = calendar.get(Calendar.DATE);
-
 
             int finalReminderYear = Integer.parseInt(parsedReminderDate[2]);
             int finalReminderMonth = Integer.parseInt(parsedReminderDate[0]) - 1;
