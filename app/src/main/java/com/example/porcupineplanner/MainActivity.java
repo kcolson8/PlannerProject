@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        createNotificationChannel();
 
         listView = findViewById(R.id.listView);
         final DatabaseOpenHelper openHelper = new DatabaseOpenHelper(this);
@@ -190,15 +191,22 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d("myTag", "Due Date: " + dueDate + " reminderDate: " + reminderDate + " reminderHour: " + reminderHour + " reminderMinute: " + reminderMinute);
             String[] parsedReminderDate = reminderDate.split("/"); //format: [month, date, year]
+            Log.d("myTag", "reminderMonth: " + parsedReminderDate[0] + " reminderDate: " + parsedReminderDate[1] + " reminderYear: " + parsedReminderDate[2]);
 
-            int currentHour = calendar.get(Calendar.HOUR);
+            int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
             int currentMinute = calendar.get(Calendar.MINUTE);
             int currentYear = calendar.get(Calendar.YEAR);
             int currentMonth = calendar.get(Calendar.MONTH);
             int currentDay = calendar.get(Calendar.DATE);
 
 
-            Date reminderCalendarDate = new GregorianCalendar(Integer.parseInt(parsedReminderDate[2]), Integer.parseInt(parsedReminderDate[0]), Integer.parseInt(parsedReminderDate[1]), reminderHour, reminderMinute).getTime();
+            int finalReminderYear = Integer.parseInt(parsedReminderDate[2]);
+            Log.d("myTag", "final Reminder year: " + finalReminderYear);
+            int finalReminderMonth = Integer.parseInt(parsedReminderDate[0]) - 1;
+            Log.d("myTag", "final reminder month: " + finalReminderMonth);
+            int finalReminderDay = Integer.parseInt(parsedReminderDate[1]);
+
+            Date reminderCalendarDate = new GregorianCalendar(finalReminderYear, finalReminderMonth,finalReminderDay, reminderHour, reminderMinute).getTime();
             Log.d("myTag", "reminder date: " + reminderCalendarDate.toString());
 
             Date currentCalendarDate = new GregorianCalendar(currentYear, currentMonth, currentDay, currentHour, currentMinute).getTime();
@@ -207,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             long timeDayDifference = reminderCalendarDate.getTime() - currentCalendarDate.getTime(); //should become delay;
             Log.d("myTag", "time difference in milliseconds: " + timeDayDifference);
 
-            scheduleNotification(this, 1000, 1);
+            scheduleNotification(this, timeDayDifference, 1);
         }
     }
 }
