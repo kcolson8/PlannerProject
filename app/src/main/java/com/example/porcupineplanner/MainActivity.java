@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     SimpleCursorAdapter cursorAdapter;
     final String CHANNEL_ID = "channel id";
     Calendar calendar = Calendar.getInstance();
-    DatePickerDialog datePickerDialog;
     String noteTitle = "";
 
     private void createNotificationChannel() {
@@ -132,13 +131,19 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intent, EDIT_HOMEWORK_REQUEST_CODE);
                         break;
                     case "exam":
+                        Intent examIntent = new Intent(MainActivity.this, ExamActivity.class);
                         Exam selectedExam = openHelper.getExamByID(position + 1);
+                        Log.d("myTag", "selectedExam title: " + selectedExam.getTitle());
+                        examIntent.putExtra("id", position + 1);
+                        examIntent.putExtra("title", selectedExam.getTitle());
+                        examIntent.putExtra("description", selectedExam.getDescription());
+                        examIntent.putExtra("dueDate", selectedExam.getDueDate());
+                        examIntent.putExtra("reminderDate", selectedExam.getReminderDate());
+                        examIntent.putExtra("reminderHour", selectedExam.getReminderHour());
+                        examIntent.putExtra("reminderMinute", selectedExam.getReminderMinute());
+
+                        startActivityForResult(examIntent, EDIT_EXAM_REQUEST_CODE);
                         break;
-                    /*case "reminder":
-                        Homework selectedReminder = openHelper.getSelectOneHomeworkCursor(position + 1);
-                    /*case "exam":
-                        Exam selectedExam = openHelper.getSelectOneHomeworkCursor(position + 1);
-                        break;*/
                     case "reminder":
                         Intent intentReminder = new Intent(MainActivity.this, ReminderActivity.class);
                         Reminder selectedReminder = openHelper.getReminderByID(position + 1);
