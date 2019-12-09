@@ -9,6 +9,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+// This is a comment added by Liz :)
+
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     static final String DATABASE_NAME = "plannerDatabase";
     static final int DATABASE_VERSION_NUMBER = 1;
