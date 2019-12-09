@@ -6,30 +6,31 @@
     android:layout_height="match_parent"
     android:columnCount="2"
     android:padding="10dp"
-    tools:context=".HomeworkActivity">
+    tools:context=".ReminderActivity">
 
     <EditText
-        android:id="@+id/titleEditText"
-        android:hint="Assignment title"
+        android:id="@+id/reminderTitleEditText"
+        android:hint="Reminder title"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2" />
 
+
     <EditText
-        android:id="@+id/descriptionEditText"
+        android:id="@+id/reminderDescriptionEditText"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:hint="Homework assignment description"
+        android:hint="Reminder description"
         android:gravity="top"
         android:layout_rowWeight="2"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2" />
 
-    <TextView
-        android:id="@+id/dueDateTextView"
-        android:text=" Homework due date"
+    <!-- <TextView
+        android:id="@+id/examDateTextView"
+        android:text=" Exam date"
         android:textColor="@color/black"
         android:gravity="bottom"
         android:textSize="20dp"
@@ -37,19 +38,19 @@
         android:layout_height="0dp"
         android:layout_rowWeight=".5"
         android:layout_columnWeight="1"
-        android:layout_columnSpan="2" />
+        android:layout_columnSpan="2" /> -->
 
-    <Button
-        android:id="@+id/pickDueDateButton"
+    <!-- <Button
+        android:id="@+id/reminderPickDateButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Pick Due Date"
+        android:text="Pick Reminder Date"
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
-        android:layout_columnSpan="1" />
+        android:layout_columnSpan="1" /> -->
 
-    <TextView
-        android:id="@+id/dueDateConfirmTextView"
+    <!-- <TextView
+        android:id="@+id/reminderDateConfirmTextView"
         android:text=""
         android:textColor="@color/blue"
         android:textAlignment="center"
@@ -59,7 +60,7 @@
         android:layout_height="0dp"
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
-        android:layout_columnSpan="1" />
+        android:layout_columnSpan="1" /> -->
 
     <TextView
         android:id="@+id/reminderDateTextView"
@@ -118,7 +119,7 @@
         android:timePickerMode="spinner" />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/reminderSaveButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Save!"
