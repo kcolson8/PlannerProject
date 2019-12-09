@@ -42,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
     static final int NEW_HOMEWORK_REQUEST_CODE = 1;
     static final int EDIT_HOMEWORK_REQUEST_CODE = 2;
     static final int NEW_EXAM_REQUEST_CODE = 3;
+    static final int EDIT_EXAM_REQUEST_CODE = 4;
+    static final int NEW_REMINDER_REQUEST_CODE = 5;
+    static final int EDIT_REMINDER_REQUEST_CODE = 6;
     ListView listView;
     SimpleCursorAdapter cursorAdapter;
     final String CHANNEL_ID = "channel id";
     Calendar calendar = Calendar.getInstance();
     DatePickerDialog datePickerDialog;
-    // Date currentTime = Calendar.getInstance().getTime();
     String noteTitle = "";
 
     private void createNotificationChannel() {
@@ -112,12 +114,11 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //if homework item is selected...
-                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
-
                 String itemType = openHelper.getItemType(position + 1);
                 switch (itemType) {
                     case "homework":
+                        //if homework item is selected...
+                        Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
                         Homework selectedHomework = openHelper.getHomeworkByID(position + 1);
                         Log.d("myTag", "selectedHomework title: " + selectedHomework.getTitle());
                         intent.putExtra("id", position + 1);
@@ -135,7 +136,21 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     /*case "reminder":
                         Homework selectedReminder = openHelper.getSelectOneHomeworkCursor(position + 1);
+                    /*case "exam":
+                        Exam selectedExam = openHelper.getSelectOneHomeworkCursor(position + 1);
                         break;*/
+                    case "reminder":
+                        Intent intentReminder = new Intent(MainActivity.this, ReminderActivity.class);
+                        Reminder selectedReminder = openHelper.getReminderByID(position + 1);
+                        intentReminder.putExtra("id", position + 1);
+                        intentReminder.putExtra("title", selectedReminder.getTitle());
+                        intentReminder.putExtra("description", selectedReminder.getDescription());
+                        intentReminder.putExtra("reminderDate", selectedReminder.getReminderDate());
+                        intentReminder.putExtra("reminderHour", selectedReminder.getReminderHour());
+                        intentReminder.putExtra("reminderMinute", selectedReminder.getReminderMinute());
+
+                        startActivityForResult(intentReminder, EDIT_REMINDER_REQUEST_CODE);
+                        break;
                 }
             }
         });
@@ -164,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(examIntent, NEW_EXAM_REQUEST_CODE);
                 return true;
             case R.id.addReminderButton:
-                //TODO: get this working
+                Intent intentReminder = new Intent(MainActivity.this, ReminderActivity.class);
+                startActivityForResult(intentReminder, NEW_REMINDER_REQUEST_CODE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -178,7 +194,15 @@ public class MainActivity extends AppCompatActivity {
             int id = data.getIntExtra("id", 0);
             String title = data.getStringExtra("title");
             String description = data.getStringExtra("description");
-            String dueDate = data.getStringExtra("dueDate");
+            // Reminder items don't have a due date/store null here in the db
+            // To avoid any problems, we used a try catch block
+            String dueDate;
+            try {
+                dueDate = data.getStringExtra("dueDate");
+            } catch (Exception e) {
+                dueDate = "";
+                Log.d("myTag", "        REMINDER ITEM!!!");
+            }
             String reminderDate = data.getStringExtra("reminderDate");
             int reminderHour = data.getIntExtra("reminderHour", 0);
             int reminderMinute = data.getIntExtra("reminderMinute", 0);
@@ -190,7 +214,14 @@ public class MainActivity extends AppCompatActivity {
                 openHelper.updateHomeworkById(id, new Homework(title, description, dueDate, reminderDate, reminderHour, reminderMinute));
             } else if(requestCode == NEW_EXAM_REQUEST_CODE){
                 openHelper.insertExamItem(new Exam(title, description, dueDate, reminderDate, reminderHour, reminderMinute));
+            } else if(requestCode == EDIT_EXAM_REQUEST_CODE){
+                openHelper.updateExamById(id,new Exam(title, description, dueDate, reminderDate, reminderHour, reminderMinute));
+            } else if(requestCode == NEW_REMINDER_REQUEST_CODE) {
+                openHelper.insertReminderItem(new Reminder(title, description, reminderDate, reminderHour, reminderMinute));
+            } else if(requestCode == EDIT_REMINDER_REQUEST_CODE) {
+                openHelper.updateReminderById(id, new Reminder(title, description, reminderDate, reminderHour, reminderMinute));
             }
+
             cursorAdapter = new SimpleCursorAdapter(
                     this,
                     android.R.layout.simple_list_item_activated_1,
