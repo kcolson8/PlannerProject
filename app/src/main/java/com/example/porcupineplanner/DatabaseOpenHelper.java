@@ -167,7 +167,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         while(cursor.moveToNext()) {
             String title = cursor.getString(2);
             String description = cursor.getString(3);
-            String dueDate = cursor.getString(4);
             String reminderDate = cursor.getString(5);
             int reminderHour = cursor.getInt(6);
             int reminderMinute = cursor.getInt(7);

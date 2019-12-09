@@ -6,30 +6,31 @@
     android:layout_height="match_parent"
     android:columnCount="2"
     android:padding="10dp"
-    tools:context=".HomeworkActivity">
+    tools:context=".ExamActivity">
 
     <EditText
-        android:id="@+id/titleEditText"
-        android:hint="Assignment title"
+        android:id="@+id/examTitleEditText"
+        android:hint="Exam title"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2" />
 
+
     <EditText
-        android:id="@+id/descriptionEditText"
+        android:id="@+id/examDescriptionEditText"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:hint="Homework assignment description"
+        android:hint="Exam description"
         android:gravity="top"
         android:layout_rowWeight="2"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2" />
 
     <TextView
-        android:id="@+id/dueDateTextView"
-        android:text=" Homework due date"
+        android:id="@+id/examDateTextView"
+        android:text=" Exam date"
         android:textColor="@color/black"
         android:gravity="bottom"
         android:textSize="20dp"
@@ -40,16 +41,16 @@
         android:layout_columnSpan="2" />
 
     <Button
-        android:id="@+id/pickDueDateButton"
+        android:id="@+id/examPickDateButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Pick Due Date"
+        android:text="Pick Exam Date"
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
         android:layout_columnSpan="1" />
 
     <TextView
-        android:id="@+id/dueDateConfirmTextView"
+        android:id="@+id/examDateConfirmTextView"
         android:text=""
         android:textColor="@color/blue"
         android:textAlignment="center"
@@ -62,7 +63,7 @@
         android:layout_columnSpan="1" />
 
     <TextView
-        android:id="@+id/reminderDateTextView"
+        android:id="@+id/examReminderDateTextView"
         android:text=" Reminder date"
         android:textColor="@color/black"
         android:gravity="bottom"
@@ -74,7 +75,7 @@
         android:layout_columnSpan="2" />
 
     <Button
-        android:id="@+id/pickReminderDateButton"
+        android:id="@+id/examPickReminderDateButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Pick Reminder Date"
@@ -83,7 +84,7 @@
         android:layout_columnSpan="1" />
 
     <TextView
-        android:id="@+id/reminderDateConfirmTextView"
+        android:id="@+id/examReminderDateConfirmTextView"
         android:text=""
         android:textColor="@color/blue"
         android:textAlignment="center"
@@ -96,7 +97,7 @@
         android:layout_columnSpan="1" />
 
     <TextView
-        android:id="@+id/reminderTextView"
+        android:id="@+id/examReminderTextView"
         android:text="Pick a time you want to be reminded"
         android:textColor="@color/black"
         android:textAlignment="center"
@@ -109,7 +110,7 @@
         android:layout_columnSpan="2" />
 
     <TimePicker
-        android:id="@+id/reminderTimePicker"
+        android:id="@+id/examReminderTimePicker"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_rowWeight="1.5"
@@ -118,7 +119,7 @@
         android:timePickerMode="spinner" />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/examSaveButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Save!"
