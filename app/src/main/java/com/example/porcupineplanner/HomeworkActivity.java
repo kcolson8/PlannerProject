@@ -39,7 +39,7 @@ public class HomeworkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
 
-        //grabs intent when editing a note to set title, label, and content as user last set it
+        //grabs intent when editing an homework object to set fields the same as user last saved it
         Intent intent = getIntent();
         if(intent != null){
             id = intent.getIntExtra("id",0);

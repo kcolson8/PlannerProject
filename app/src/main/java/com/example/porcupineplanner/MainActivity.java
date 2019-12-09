@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
     static final int NEW_HOMEWORK_REQUEST_CODE = 1;
     static final int EDIT_HOMEWORK_REQUEST_CODE = 2;
+    static final int NEW_EXAM_REQUEST_CODE = 3;
     ListView listView;
     SimpleCursorAdapter cursorAdapter;
     final String CHANNEL_ID = "channel id";
@@ -67,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void scheduleNotification(Context context, long delay, int notificationId) {//delay is after how much time(in millis) from current time you want to schedule the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                //.setSmallIcon(R.drawable.notification_icon)
-                //.setContentTitle(textTitle)
-                //.setContentText(textContent)
                 //<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
                 .setSmallIcon(R.drawable.porcupine)
                 .setContentTitle("Reminder: You have an unfinished task")
@@ -132,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
 
                         startActivityForResult(intent, EDIT_HOMEWORK_REQUEST_CODE);
                         break;
-                    /*case "exam":
-                        Exam selectedExam = openHelper.getSelectOneHomeworkCursor(position + 1);
+                    case "exam":
+                        Exam selectedExam = openHelper.getExamByID(position + 1);
                         break;
-                    case "reminder":
+                    /*case "reminder":
                         Homework selectedReminder = openHelper.getSelectOneHomeworkCursor(position + 1);
                         break;*/
                 }
@@ -162,7 +160,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, NEW_HOMEWORK_REQUEST_CODE);
                 return true;
             case R.id.addExamButton:
-                //TODO: get this working
+                Intent examIntent = new Intent(MainActivity.this, ExamActivity.class);
+                startActivityForResult(examIntent, NEW_EXAM_REQUEST_CODE);
                 return true;
             case R.id.addReminderButton:
                 //TODO: get this working
@@ -178,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             int id = data.getIntExtra("id", 0);
             String title = data.getStringExtra("title");
-            //String className = data.getStringExtra("class");
             String description = data.getStringExtra("description");
             String dueDate = data.getStringExtra("dueDate");
             String reminderDate = data.getStringExtra("reminderDate");
@@ -190,6 +188,8 @@ public class MainActivity extends AppCompatActivity {
                 openHelper.insertHomeworkItem(new Homework(title, description, dueDate, reminderDate, reminderHour, reminderMinute));
             } else if(requestCode == EDIT_HOMEWORK_REQUEST_CODE){
                 openHelper.updateHomeworkById(id, new Homework(title, description, dueDate, reminderDate, reminderHour, reminderMinute));
+            } else if(requestCode == NEW_EXAM_REQUEST_CODE){
+                openHelper.insertExamItem(new Exam(title, description, dueDate, reminderDate, reminderHour, reminderMinute));
             }
             cursorAdapter = new SimpleCursorAdapter(
                     this,
