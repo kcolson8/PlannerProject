@@ -22,10 +22,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -157,6 +160,64 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intentReminder, EDIT_REMINDER_REQUEST_CODE);
                         break;
                 }
+            }
+        });
+
+
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                int numChecked = listView.getCheckedItemCount();
+                actionMode.setTitle(numChecked + " selected");
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                MenuInflater menuInflater = getMenuInflater();
+                menuInflater.inflate(R.menu.cam_menu, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                //don't need this
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                //executes when user clicks a cam menu item
+                //listView = (ListView) findViewById(R.id.noteListView);
+
+                switch (menuItem.getItemId()){
+                    case R.id.deleteMenuItem:
+                        SparseBooleanArray selectedItems = listView.getCheckedItemPositions();
+                        Log.d("myTag", "selected items size: " + selectedItems.size());
+                        for(int i = 0; i < selectedItems.size(); i++){
+                            int itemId = (int) listView.getItemIdAtPosition(selectedItems.keyAt(i));
+                            openHelper.deleteOneItem(itemId);
+                        }
+                        cursorAdapter = new SimpleCursorAdapter(
+                                MainActivity.this,
+                                android.R.layout.simple_list_item_activated_1,
+                                openHelper.getAllItemsCursor(),
+                                new String[] {DatabaseOpenHelper.TITLE}, //first column in database
+                                new int[] {android.R.id.text1}, //id of text view to put data into
+                                0
+                        );
+                        listView.setAdapter(cursorAdapter);
+                        cursorAdapter.notifyDataSetChanged();
+
+                        actionMode.finish(); //exit cam
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+                //don't need this
             }
         });
     }
