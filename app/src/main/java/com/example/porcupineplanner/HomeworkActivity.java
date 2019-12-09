@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -26,6 +27,10 @@ import java.util.Date;
 public class HomeworkActivity extends AppCompatActivity {
     TextView dueDateConfirmTextView;
     TextView reminderDateConfirmTextView;
+    Button saveButton;
+    EditText titleEditText;
+    EditText descriptionEditText;
+    int id;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private DatePickerDialog.OnDateSetListener mDateSetListener2;
 
@@ -33,6 +38,61 @@ public class HomeworkActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
+
+
+        //grabs intent when editing a note to set title, label, and content as user last set it
+        Intent intent = getIntent();
+        if(intent != null){
+            id = intent.getIntExtra("id",0);
+            String title = intent.getStringExtra("title");
+            String subject = intent.getStringExtra("subject");
+            String description = intent.getStringExtra("description");
+            String dueDate = intent.getStringExtra("dueDate");
+            String reminderDate = intent.getStringExtra("reminderDate");
+            int reminderHour = intent.getIntExtra("reminderHour", 0);
+            int reminderMinute = intent.getIntExtra("reminderMinute", 0);
+
+            TextView dueDateConfirmTextView = findViewById(R.id.dueDateConfirmTextView);
+            TextView reminderDateConfirmTextView = findViewById(R.id.reminderDateConfirmTextView);
+            Button saveButton = findViewById(R.id.saveButton);
+            EditText titleEditText = findViewById(R.id.titleEditText);
+            EditText descriptionEditText = findViewById(R.id.descriptionEditText);
+            TimePicker timePicker = findViewById(R.id.reminderTimePicker);
+
+            titleEditText.setText(title);
+            descriptionEditText.setText(description);
+            dueDateConfirmTextView.setText(dueDate);
+            reminderDateConfirmTextView.setText(reminderDate);
+            timePicker.setHour(reminderHour);
+            timePicker.setMinute(reminderMinute);
+        }
+
+        /*
+        //Sends note content back to MainActivity when done button is pressed
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Checks if note doesn't have a title set and notifies user via Toast message
+                if(titleEditText.getText().toString().equals("")){
+                    Toast.makeText(NoteActivity.this, "Missing title", Toast.LENGTH_SHORT).show();
+                }
+                //Checks if note doesn't have note content entered and notifies user via Toast message
+                else if (contentEditText.getText().toString().equals("")){
+                    Toast.makeText(NoteActivity.this, "Missing note content", Toast.LENGTH_SHORT).show();
+                } else { //both the note title and content have been entered
+                    Intent intent = new Intent();
+                    intent.putExtra("id", id);
+                    Log.d(TAG, "returning id: " + id);
+                    intent.putExtra("title", titleEditText.getText().toString());
+                    intent.putExtra("label", labelSpinner.getSelectedItem().toString());
+                    intent.putExtra("noteContent", contentEditText.getText().toString());
+                    setResult(Activity.RESULT_OK, intent);
+                    NoteActivity.this.finish();
+                }
+            }
+        });
+        */
+
 
         //Most of the code below is from this video:
         //https://www.youtube.com/watch?v=hwe1abDO2Ag
@@ -92,18 +152,17 @@ public class HomeworkActivity extends AppCompatActivity {
             }
         };
 
-        final EditText titleEditText = findViewById(R.id.titleEditText);
-        final EditText descriptionEditText = findViewById(R.id.descriptionEditText);
+        titleEditText = findViewById(R.id.titleEditText);
+        descriptionEditText = findViewById(R.id.descriptionEditText);
         final TimePicker reminderTimePicker = findViewById(R.id.reminderTimePicker);
-        final int hour = reminderTimePicker.getHour();
-        final int minute = reminderTimePicker.getMinute();
-        Button saveButton = findViewById(R.id.saveButton);
+        saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int userSetHour = reminderTimePicker.getHour();
-                int userSetMinute = reminderTimePicker.getMinute();
+                int userSetMinute = reminderTimePicker.getMinute() - 1;
                 Intent intent = new Intent();
+                intent.putExtra("id", id);
                 intent.putExtra("title", titleEditText.getText().toString());
                 intent.putExtra("class", "spinner value");
                 intent.putExtra("description", descriptionEditText.getText().toString());

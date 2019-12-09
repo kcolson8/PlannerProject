@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     Calendar calendar = Calendar.getInstance();
     DatePickerDialog datePickerDialog;
    // Date currentTime = Calendar.getInstance().getTime();
+    String noteTitle = "";
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -71,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 //.setContentText(textContent)
                 //<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
                 .setSmallIcon(R.drawable.porcupine)
-                .setContentTitle("Hello world!")
-                .setContentText("You just got a notification")
+                .setContentTitle("Reminder: You have an unfinished task")
+                .setContentText(noteTitle)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         Intent intent = new Intent(context, MainActivity.class);
@@ -110,17 +111,15 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(cursorAdapter);
 
         //click listener for when an item in the listView is clicked to view/edit
-        /*
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int itemId = (int) listView.getItemAtPosition(position);
-
                 //if homework item is selected...
                 Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
 
-                Homework selectedHomework = openHelper.getSelectOneHomeworkCursor(id); //HomeworkId?
+                Homework selectedHomework = openHelper.getSelectOneHomeworkCursor(position + 1); //HomeworkId?
 
+                intent.putExtra("id", position + 1);
                 intent.putExtra("title", selectedHomework.getTitle());
                 intent.putExtra("subject", selectedHomework.getSubject());
                 intent.putExtra("description", selectedHomework.getDescription());
@@ -132,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, EDIT_HOMEWORK_REQUEST_CODE);
             }
         });
-         */
     }
 
     @Override
@@ -167,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == NEW_HOMEWORK_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            int id = data.getIntExtra("id", 0);
             String title = data.getStringExtra("title");
             String className = data.getStringExtra("class");
             String description = data.getStringExtra("description");
@@ -177,8 +176,11 @@ public class MainActivity extends AppCompatActivity {
             int reminderMinute = data.getIntExtra("reminderMinute", 0);
 
             DatabaseOpenHelper openHelper = new DatabaseOpenHelper(this);
-            openHelper.insertHomeworkItem(new Homework(title, className, description, dueDate, reminderDate, reminderHour, reminderMinute));
-
+            if(requestCode == NEW_HOMEWORK_REQUEST_CODE) {
+                openHelper.insertHomeworkItem(new Homework(title, className, description, dueDate, reminderDate, reminderHour, reminderMinute));
+            } else if(requestCode == EDIT_HOMEWORK_REQUEST_CODE){
+                openHelper.updateHomeworkById(id, new Homework(title, className, description, dueDate, reminderDate, reminderHour, reminderMinute));
+            }
             cursorAdapter = new SimpleCursorAdapter(
                     this,
                     android.R.layout.simple_list_item_activated_1,
@@ -189,32 +191,30 @@ public class MainActivity extends AppCompatActivity {
             );
             listView.setAdapter(cursorAdapter);
 
-            Log.d("myTag", "Due Date: " + dueDate + " reminderDate: " + reminderDate + " reminderHour: " + reminderHour + " reminderMinute: " + reminderMinute);
             String[] parsedReminderDate = reminderDate.split("/"); //format: [month, date, year]
-            Log.d("myTag", "reminderMonth: " + parsedReminderDate[0] + " reminderDate: " + parsedReminderDate[1] + " reminderYear: " + parsedReminderDate[2]);
 
             int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
             int currentMinute = calendar.get(Calendar.MINUTE);
+            int currentSecond = calendar.get(Calendar.SECOND);
             int currentYear = calendar.get(Calendar.YEAR);
             int currentMonth = calendar.get(Calendar.MONTH);
             int currentDay = calendar.get(Calendar.DATE);
 
 
             int finalReminderYear = Integer.parseInt(parsedReminderDate[2]);
-            Log.d("myTag", "final Reminder year: " + finalReminderYear);
             int finalReminderMonth = Integer.parseInt(parsedReminderDate[0]) - 1;
-            Log.d("myTag", "final reminder month: " + finalReminderMonth);
             int finalReminderDay = Integer.parseInt(parsedReminderDate[1]);
 
-            Date reminderCalendarDate = new GregorianCalendar(finalReminderYear, finalReminderMonth,finalReminderDay, reminderHour, reminderMinute).getTime();
+            Date reminderCalendarDate = new GregorianCalendar(finalReminderYear, finalReminderMonth,finalReminderDay, reminderHour, reminderMinute, 0).getTime();
             Log.d("myTag", "reminder date: " + reminderCalendarDate.toString());
 
-            Date currentCalendarDate = new GregorianCalendar(currentYear, currentMonth, currentDay, currentHour, currentMinute).getTime();
+            Date currentCalendarDate = new GregorianCalendar(currentYear, currentMonth, currentDay, currentHour, currentMinute, currentSecond).getTime();
             Log.d("myTag", "current date: " + currentCalendarDate.toString());
 
             long timeDayDifference = reminderCalendarDate.getTime() - currentCalendarDate.getTime(); //should become delay;
             Log.d("myTag", "time difference in milliseconds: " + timeDayDifference);
 
+            noteTitle = title;
             scheduleNotification(this, timeDayDifference, 1);
         }
     }

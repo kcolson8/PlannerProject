@@ -21,7 +21,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     static final String DESCRIPTION = "description";
     static final String DUE_DATE = "dueDate";
     static final String REMINDER_DATE = "reminderDate";
-    static final String REMINDER_TIME = "reminderTime";
+    static final String REMINDER_HOUR = "reminderHour";
+    static final String REMINDER_MINUTE = "reminderMinute";
     static final String EXAM_DATE = "examDate";
 
     public DatabaseOpenHelper(Context context) {
@@ -47,7 +48,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 DESCRIPTION + " TEXT, " +
                 DUE_DATE + " TEXT, " +
                 REMINDER_DATE + " TEXT, " +
-                REMINDER_TIME + " TEXT)";
+                REMINDER_HOUR + " TEXT, " +
+                REMINDER_MINUTE + " TEXT)";
         sqLiteDatabase.execSQL(sqlCreateHomework);
 
         /*// CREATE TABLE examTable (_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,7 +91,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         String sqlInsertHomework = "INSERT INTO " + HOMEWORK_TABLE + " VALUES (null, '" +
                 homework.getTitle() + "', '" +  homework.getSubject() + "', '" +
                 homework.getDescription() + "', '" +  homework.getDueDate() + "', '" +
-                homework.getReminderDate() + "', '" +  homework.getSubject() + "')";
+                homework.getReminderDate() + "', '" +  homework.getReminderHour() + "', '" +
+                homework.getReminderMinute() + "')";
         // Get a reference to the database for writing
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sqlInsertHomework);
@@ -156,23 +159,24 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.close();
     }*/
 
-    /*public void updateHomeworkById(int id, Homework updatedHomework) {
+    public void updateHomeworkById(int id, Homework updatedHomework) {
         // UPDATE homeworkTable SET title='...', className='...', description='...', dueDate='...', reminderDate='...', reminderTime='...' WHERE id=...
         //      ... represents the passed in values
         String sqlUpdateHomework = "UPDATE " + HOMEWORK_TABLE + " SET " +
                 TITLE + "='" + updatedHomework.getTitle() + "', " +
-                CLASS + "='" + updatedHomework.getClassName() + "', " +
+                CLASS + "='" + updatedHomework.getSubject() + "', " +
                 DESCRIPTION + "='" + updatedHomework.getDescription() + "', " +
                 DUE_DATE + "='" + updatedHomework.getDueDate() + "', " +
                 REMINDER_DATE + "='" + updatedHomework.getReminderDate() + "', " +
-                REMINDER_TIME + "='" + updatedHomework.getReminderTime() + "' WHERE " +
+                REMINDER_HOUR + "='" + updatedHomework.getReminderHour() + "', " +
+                REMINDER_MINUTE + "='" + updatedHomework.getReminderMinute() + "' WHERE " +
                 ID + "=" + id;
         // Get a reference to the database for writing
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sqlUpdateHomework);
         db.close();
     }
-
+/*
     public void updateExamById(int id, Exam updatedExam) {
         // UPDATE examTable SET title='...', className='...', description='...', examDate='...', reminderDate='...', reminderTime='...' WHERE id=...
         //      ... represents the passed in values
